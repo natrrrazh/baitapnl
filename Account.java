@@ -1,27 +1,35 @@
 
+package Account;
+class Customer {
 
-public class Account {
-    private String id;
+    private int ID;
     private String name;
-    private int balance;
+    private char gender;
+    private double discount;
 
-    public Account(String id, String name) {
-        this.id = id;
+    public Customer(int ID, String name, double discount) {
+        this.ID = ID;
         this.name = name;
+        this.discount = discount;
     }
 
-    public Account(String id, String name, int balance) {
-        this.id = id;
+
+    public Customer(int ID, String name, char gender) {
+        this.ID = ID;
         this.name = name;
-        this.balance = balance;
+        if (gender == 'm' || gender == 'f') {
+            this.gender = gender;
+        } else {
+            System.out.println("Gender of 'm' or 'f'");
+        }
     }
 
-    public String getID() {
-        return id;
+    public int getID() {
+        return ID;
     }
 
-    public void setID(String id) {
-        this.id = id;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getName() {
@@ -32,69 +40,108 @@ public class Account {
         this.name = name;
     }
 
-    public int getBalance() {
-        return balance;
+    public char getGender() {
+        return gender;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
-    public int credit(int amount){
-        this.balance += amount;
-        return this.balance;
-    }
-
-    public int debit(int amount){
-        if(amount<=this.balance){
-            this.balance-=amount;
-        }else{
-            System.out.println("Amount exceeded balance");
+    public void setGender(char gender) {
+        if (gender == 'm' || gender == 'f') {
+            this.gender = gender;
+        } else {
+            System.out.println("Gender of 'm' or 'f'");
         }
-        return this.balance;
     }
 
-    public int transferTo(Account account, int amount){
-        if(amount<=this.balance){
-            account.balance += amount;
-            this.balance -= amount;
-        }else{
-            System.out.println("Amount exceeded balance");
-        }
-        return this.balance;
+    public double getDiscount() {
+        return discount;
     }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+    
+    
 
     @Override
     public String toString() {
-        return "Account[" + "id=" + id + ",name=" + name + ",balance=" + balance + ']';
+        return name + "(" + ID + ")";
     }
 
 }
 
-class TestAccount {
+public class Account {
+    private int id;
+    private Customer customer;
+    private double balance;
+
+    public Account(int id, Customer customer, double balance) {
+        this.id = id;
+        this.customer = customer;
+        this.balance = balance;
+    }
+
+    public Account(int id, Customer customer) {
+        this.id = id;
+        this.customer = customer;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+    
+    public String getCustomerName(){
+        return this.customer.getName();
+    }
+    
+    public Account deposit(double amount){
+        this.balance+=amount;
+        return this;
+    }
+    
+    public Account withdraw(double amount){
+        if(amount>this.balance){
+            System.out.println("amount withdraw exceeds the current balance!");
+        }else{
+            this.balance -= amount;
+        }
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return this.customer.getName() +"("+this.id+")" + " balance="+String.format("$%.2f", this.balance);
+    }
+    
+}
+
+class TestAccount{
     public static void main(String[] args) {
-        // Test constructor and toString()
-        Account a1 = new Account("A101", "Tan Ah Teck", 88);
-        System.out.println(a1);  // toString();
-        Account a2 = new Account("A102", "Kumar"); // default balance
-        System.out.println(a2);
-
-        // Test Getters
-        System.out.println("ID: " + a1.getID());
-        System.out.println("Name: " + a1.getName());
-        System.out.println("Balance: " + a1.getBalance());
-
-        // Test credit() and debit()
-        a1.credit(100);
-        System.out.println(a1);
-        a1.debit(50);
-        System.out.println(a1);
-        a1.debit(500);  // debit() error
-        System.out.println(a1);
-
-        // Test transfer()
-        a1.transferTo(a2, 100);  // toString()
-        System.out.println(a1);
-        System.out.println(a2);
+        Account account = new Account(1, new Customer(2, "Ha Bao Tran", 'm'),10000.0);
+        System.out.println(account);
+        account.withdraw(100);
+        System.out.println(account);
+        System.out.println(account.getCustomerName());
+        account.deposit(500);
+        System.out.println(account);
     }
 }
